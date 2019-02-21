@@ -1,11 +1,14 @@
-﻿using PortfolioWebApi.Models.Request;
+﻿using Microsoft.AspNet.Identity;
+using PortfolioWebApi.Models.Request;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http;
 
 namespace PortfolioWebApi.Services
 {
@@ -33,9 +36,11 @@ namespace PortfolioWebApi.Services
         // Helper method to create and open a DB connection
         private SqlConnection GetConnection()
         {
-            var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["Default"].ConnectionString);
+            var conn = new SqlConnection(ConfigurationManager.ConnectionStrings["AuthContext"].ConnectionString);
             conn.Open();
             return conn;
         }
+
+
     }
 }

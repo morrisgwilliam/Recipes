@@ -2,6 +2,7 @@ using PortfolioWebApi.Services;
 using System;
 
 using Unity;
+using Unity.Injection;
 
 namespace PortfolioWebApi
 {
@@ -45,6 +46,7 @@ namespace PortfolioWebApi
             // container.RegisterType<IProductRepository, ProductRepository>();
 
             container.RegisterType<Services.IUserService, UserService>();
+
         }
     }
 }
