@@ -11,35 +11,33 @@ using System.Web.Http;
 
 namespace PortfolioWebApi.Controllers
 {
-    [RoutePrefix("api/user")]
+    [RoutePrefix("api/users")]
     public class UserApiController : ApiController
     {
-        //IUserService _service;
-        AuthService _authService;
-        public UserApiController()
+        IUserService _userService;
+        IJwtAuthService _authService;
+
+        public UserApiController(IUserService userService, IJwtAuthService authService)
         {
-            //_service = service;
-            _authService = new AuthService();
+            _userService = userService;
+            _authService = authService;
         }
 
         [AllowAnonymous]
         [Route("register"), HttpPost]
-        public async Task<IHttpActionResult> Register(AddUserRequest model)
+        public HttpResponseMessage Register(AddUserRequest model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
-
-            IdentityResult result = await _authService.RegisterUser(model);
-            IHttpActionResult errorResult = GetErrorResult(result);
-            if (errorResult != null)
-            {
-                return errorResult;
-            }
-
-            return Ok();
+            _userService.AddUser(model);
+            return Request.CreateResponse(HttpStatusCode.Created);
         }
+
+        [Route("login"), HttpPost]
+        [AllowAnonymous]
+        public HttpResponseMessage LogIn(UserLogInRequest model)
 
         //[Route, HttpPost]
         //public HttpResponseMessage Add(AddUserRequest model)
@@ -53,37 +51,37 @@ namespace PortfolioWebApi.Controllers
         //    return Request.CreateResponse(HttpStatusCode.OK, Id);
         //}
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _authService.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        _authService.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
 
-        private IHttpActionResult GetErrorResult(IdentityResult result)
-        {
-            if (result == null)
-            {
-                return InternalServerError();
-            }
-            if (!result.Succeeded)
-            {
-                if (result.Errors != null)
-                {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
-                }
-                if (ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-                return BadRequest(ModelState);
-            }
-            return null;
-        }
+        //private IHttpActionResult GetErrorResult(IdentityResult result)
+        //{
+        //    if (result == null)
+        //    {
+        //        return InternalServerError();
+        //    }
+        //    if (!result.Succeeded)
+        //    {
+        //        if (result.Errors != null)
+        //        {
+        //            foreach (string error in result.Errors)
+        //            {
+        //                ModelState.AddModelError("", error);
+        //            }
+        //        }
+        //        if (ModelState.IsValid)
+        //        {
+        //            return BadRequest();
+        //        }
+        //        return BadRequest(ModelState);
+        //    }
+        //    return null;
+        //}
     }
 }

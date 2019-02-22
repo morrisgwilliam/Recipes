@@ -3,6 +3,7 @@ using System;
 
 using Unity;
 using Unity.Injection;
+using Unity.Lifetime;
 
 namespace PortfolioWebApi
 {
@@ -46,7 +47,7 @@ namespace PortfolioWebApi
             // container.RegisterType<IProductRepository, ProductRepository>();
 
             container.RegisterType<Services.IUserService, UserService>();
-
+            container.RegisterType<Services.IJwtAuthService, JwtAuthService>(new ContainerControlledLifetimeManager());
         }
     }
 }

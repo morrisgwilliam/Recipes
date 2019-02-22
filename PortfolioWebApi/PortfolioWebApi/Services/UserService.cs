@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
+using PortfolioWebApi.Models.Domain;
 using PortfolioWebApi.Models.Request;
+using PortfolioWebApi.Models.Request.Users;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,11 +11,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using PortfolioWebApi.Services;
 
 namespace PortfolioWebApi.Services
 {
     public class UserService : IUserService
     {
+        private IJwtAuthService _authenticationService;
+
+        public UserService(IJwtAuthService authenticationService)
+        {
+            _authenticationService = authenticationService;
+        }
+
         public int AddUser(AddUserRequest data)
         {
             using (var conn = GetConnection())
@@ -31,6 +41,24 @@ namespace PortfolioWebApi.Services
                 return (int)cmd.Parameters["@Id"].Value;
             }
 
+        }
+
+        public bool LogIn(UserLogInRequest user)
+        {
+            bool isSuccessful = false;
+            UserBase response = Get(user.EmailAddress, user.Password);
+            if (response != null)
+            {
+                _authenticationService.LogIn(response);
+                isSuccessful = true;
+            }
+            return isSuccessful;
+        }
+
+        public UserBase Get(string email, string password)
+        {
+            UserBase authUser = null;
+            List<string> roles = null;
         }
 
         // Helper method to create and open a DB connection
