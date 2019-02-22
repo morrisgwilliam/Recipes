@@ -39,6 +39,18 @@ namespace PortfolioWebApi.Services
                     identity.AddClaim(new Claim(ClaimsIdentity.DefaultRoleClaimType, singleRole, ClaimValueTypes.String));
                 };
             }
+
+            AuthenticationProperties props = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                IssuedUtc = DateTime.UtcNow,
+                ExpiresUtc = DateTime.UtcNow.AddDays(60),
+                AllowRefresh = true,
+
+            };
+            //identity.AddClaims(extraClaims);
+            // HttpContext.Current.User = new GenericPrincipal(identity, null);
+            HttpContext.Current.GetOwinContext().Authentication.SignIn(props, identity);
         }
 
         public void LogOut()

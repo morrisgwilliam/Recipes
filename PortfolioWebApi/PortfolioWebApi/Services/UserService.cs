@@ -55,10 +55,41 @@ namespace PortfolioWebApi.Services
             return isSuccessful;
         }
 
+        public void LogOut()
+        {
+            _authenticationService.LogOut();
+        }
+
         public UserBase Get(string email, string password)
         {
-            UserBase authUser = null;
-            List<string> roles = null;
+
+
+            using (var conn = GetConnection())
+            {
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "dbo.SelectByEmail";
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@EmailAddress", email);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    var authUser = new UserBase();
+                    while (reader.Read())
+                    {
+                        authUser.Email = (string)reader["Email"];
+                        authUser.Id = (int)reader["Id"];
+                        authUser.Password = (string)reader["Password"];
+                    }
+                    bool isSuccessful = BCrypt.Net.BCrypt.Verify(password, authUser.Password);
+                    if (!isSuccessful)
+                    {
+                        authUser = null;
+                        return authUser;
+                    }
+                    return authUser;
+                }
+            }
         }
 
         // Helper method to create and open a DB connection

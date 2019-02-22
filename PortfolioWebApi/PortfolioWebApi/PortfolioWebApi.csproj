@@ -176,7 +176,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Domain\UserBase.cs" />
-    <Compile Include="Models\Request\AddUserRequest.cs" />
+    <Compile Include="Models\Request\Users\AddUserRequest.cs" />
+    <Compile Include="Models\Request\Users\UserLogInRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Services\AuthService.cs" />

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using PortfolioWebApi.Models.Request;
+using PortfolioWebApi.Models.Request.Users;
 using PortfolioWebApi.Services;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Web.Http;
 
 namespace PortfolioWebApi.Controllers
 {
+
     [RoutePrefix("api/users")]
     public class UserApiController : ApiController
     {
@@ -38,6 +40,28 @@ namespace PortfolioWebApi.Controllers
         [Route("login"), HttpPost]
         [AllowAnonymous]
         public HttpResponseMessage LogIn(UserLogInRequest model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            bool isSuccessful = _userService.LogIn(model);
+            var status = HttpStatusCode.BadRequest;
+            if (isSuccessful)
+            {
+                status = HttpStatusCode.OK;
+            }
+            return Request.CreateResponse(status, isSuccessful);
+        }
+
+        [Route("test"), HttpPost]
+        [Authorize]
+        public HttpResponseMessage LogIn()
+        {
+            var status = HttpStatusCode.OK;
+
+            return Request.CreateResponse(status);
+        }
 
         //[Route, HttpPost]
         //public HttpResponseMessage Add(AddUserRequest model)
