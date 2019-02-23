@@ -1,28 +1,47 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import * as userService from "../src/Services/userService";
+import { Route, Switch, withRouter } from "react-router-dom";
+import LogIn from "./Components/LogIn";
+import Dashboard from "./Components/Dashboard";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAuthorized: false,
+      currentUser: {}
+    };
+  }
+  componentDidMount() {
+    //this.getCurrentUser();
+  }
+  getCurrentUser = () => {
+    userService
+      .getCurrent()
+      .then(this.getCurrentOnSuccess)
+      .catch(this.GetCurrentOnError);
+  };
+  getcurrentOnSuccess = response => {
+    debugger;
+    console.log(response);
+  };
+  getcurrentOnError = response => {
+    debugger;
+    console.log(response);
+  };
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Switch>
+        <Route exact path="/login" render={props => <LogIn {...props} />} />
+        <Route
+          exact
+          path="/dashboard"
+          render={props => <Dashboard {...props} />}
+        />
+      </Switch>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

@@ -54,6 +54,22 @@ namespace PortfolioWebApi.Controllers
             return Request.CreateResponse(status, isSuccessful);
         }
 
+        [AllowAnonymous]
+        [Route("current"), HttpGet]
+        public HttpResponseMessage Current()
+        {
+            var user = _authService.GetCurrentUser();
+            return Request.CreateResponse(HttpStatusCode.OK, user);
+        }
+
+        [AllowAnonymous]
+        [Route("logout")]
+        public HttpResponseMessage LogOut()
+        {
+            _authService.LogOut();
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
         [Route("test"), HttpPost]
         [Authorize]
         public HttpResponseMessage LogIn()
