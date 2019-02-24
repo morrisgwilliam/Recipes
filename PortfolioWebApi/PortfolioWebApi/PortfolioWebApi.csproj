@@ -180,12 +180,10 @@
     <Compile Include="Models\Request\Users\UserLogInRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
-    <Compile Include="Services\AuthService.cs" />
     <Compile Include="Interfaces\IJwtAuthService.cs" />
     <Compile Include="Services\JwtAuthService.cs" />
     <Compile Include="Services\SecurityStringExtentions.cs" />
     <Compile Include="Services\UserService.cs" />
-    <Compile Include="SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

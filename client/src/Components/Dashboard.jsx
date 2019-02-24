@@ -15,7 +15,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "./ListItems";
-import SimpleTable from "./SimpleTable";
+import Container from "./SearchRecipes/Container";
+import * as userService from "../Services/userService";
 
 const drawerWidth = 240;
 
@@ -88,9 +89,6 @@ const styles = theme => ({
   chartContainer: {
     marginLeft: -22
   },
-  tableContainer: {
-    height: 320
-  },
   h5: {
     marginBottom: theme.spacing.unit * 2
   }
@@ -99,6 +97,18 @@ const styles = theme => ({
 class Dashboard extends React.Component {
   state = {
     open: true
+  };
+
+  componentDidMount() {
+    userService
+      .getCurrent()
+      .then(this.getCurrentOnSuccess)
+      .catch(this.getCurrentOnSuccess);
+  }
+
+  getCurrentOnSuccess = response => {
+    debugger;
+    console.log(response);
   };
 
   handleDrawerOpen = () => {
@@ -175,12 +185,7 @@ class Dashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Typography variant="h4" gutterBottom component="h2">
-            Products
-          </Typography>
-          <div className={classes.tableContainer}>
-            <SimpleTable />
-          </div>
+          <Container />
         </main>
       </div>
     );

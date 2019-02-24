@@ -1,5 +1,5 @@
 import axios from "axios";
-let root = "ttp://localhost:53453/api/user";
+let root = "http://localhost:53453/api/users";
 async function registerAsync(payload) {
   const config = {
     url: `${root}/register`,
@@ -10,15 +10,15 @@ async function registerAsync(payload) {
   return response.data;
 }
 
-async function getCurrent() {
+const getCurrent = () => {
   const config = {
     url: `${root}/current`,
     method: "get",
     headers: { "Content-Type": "application/json" }
   };
-  const response = await axios(config);
-  return response.data;
-}
+
+  return axios(config);
+};
 
 async function logOut() {
   const config = {
@@ -30,4 +30,16 @@ async function logOut() {
   return response.data;
 }
 
-export { registerAsync, getCurrent, logOut };
+const logIn = payload => {
+  const config = {
+    url: `${root}/login`,
+    method: "post",
+    data: payload,
+    withCredentials: true,
+    crossDomain: true,
+    headers: { "Content-Type": "application/json" }
+  };
+  return axios(config);
+};
+
+export { registerAsync, getCurrent, logOut, logIn };

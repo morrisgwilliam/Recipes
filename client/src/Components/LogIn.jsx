@@ -12,6 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
+import * as userService from "../Services/userService";
 const styles = theme => ({
   main: {
     width: "auto",
@@ -45,50 +46,87 @@ const styles = theme => ({
   }
 });
 
-function LogInForm(props) {
-  const { classes } = props;
+class LogInForm extends React.Component {
+  state = {};
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+  logIn = () => {
+    debugger;
+    const payload = {
+      EmailAddress: this.state.EmailAddress,
+      Password: this.state.Password
+    };
+    userService
+      .logIn(payload)
+      .then(this.onLogInSuccess)
+      .catch(this.onLogInError);
+  };
+  onLogInSuccess = () => {
+    debugger;
+    this.props.history.push("/dashboard", { action: "USERLOGIN" });
+  };
+  onLogInerror = response => {
+    debugger;
+    console.log(response);
+  };
+  render() {
+    const { classes } = this.props;
 
-  return (
-    <main className={classes.main}>
-      <CssBaseline />
-      <Paper className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form}>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoComplete="email" autoFocus />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              name="password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-          </FormControl>
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
+    return (
+      <main className={classes.main}>
+        <CssBaseline />
+        <Paper className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
             Sign in
-          </Button>
-        </form>
-      </Paper>
-    </main>
-  );
+          </Typography>
+          <form className={classes.form}>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="EmailAddress">Email Address</InputLabel>
+              <Input
+                id="EmailAddress"
+                name="EmailAddress"
+                //autoComplete="EmailAddress"
+                placeholder="Email Address"
+                autoFocus
+                onChange={this.handleChange}
+              />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password">Password</InputLabel>
+              <Input
+                name="Password"
+                type="Password"
+                id="Password"
+                placeholder="Password"
+                //autoComplete="current-password"
+                onChange={this.handleChange}
+              />
+            </FormControl>
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={this.logIn}
+            >
+              Sign in
+            </Button>
+          </form>
+        </Paper>
+      </main>
+    );
+  }
 }
 
 LogInForm.propTypes = {

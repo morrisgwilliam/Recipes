@@ -63,7 +63,7 @@ namespace PortfolioWebApi.Controllers
         }
 
         [AllowAnonymous]
-        [Route("logout")]
+        [Route("logout"), HttpPost]
         public HttpResponseMessage LogOut()
         {
             _authService.LogOut();
