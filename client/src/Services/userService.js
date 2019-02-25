@@ -12,7 +12,7 @@ async function registerAsync(payload) {
 
 const getCurrent = () => {
   const config = {
-    url: `${root}/current`,
+    url: `/api/users/current`,
     method: "get",
     headers: { "Content-Type": "application/json" }
   };
@@ -32,7 +32,7 @@ async function logOut() {
 
 const logIn = payload => {
   const config = {
-    url: `${root}/login`,
+    url: `/api/users/login`,
     method: "post",
     data: payload,
     withCredentials: true,

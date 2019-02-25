@@ -46,7 +46,9 @@ namespace PortfolioWebApi.Services
         public bool LogIn(UserLogInRequest user)
         {
             bool isSuccessful = false;
-            UserBase response = Get(user.EmailAddress, user.Password);
+            //testing at julies house with out Sql DB/////////
+            //UserBase response = Get(user.EmailAddress, user.Password);
+            UserBase response = new UserBase { Email = user.EmailAddress, Id = 1, Password = "Password1!" };
             if (response != null)
             {
                 _authenticationService.LogIn(response);

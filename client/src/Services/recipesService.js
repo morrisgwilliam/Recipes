@@ -2,6 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const getByIngredients = payload => {
+  debugger
   let qParams = queryString.stringify(payload.queryParams);
   const config = {
     url: `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?${qParams}`,

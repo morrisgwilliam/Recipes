@@ -86,6 +86,9 @@ class Container extends React.PureComponent {
       showTable: true
     });
   };
+  getRecipesOnError = response => {
+console.log(response)
+    }
   render() {
     const { classes } = this.props;
     const { anchorEl, diet, ingredients } = this.state;

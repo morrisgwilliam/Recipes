@@ -78,50 +78,5 @@ namespace PortfolioWebApi.Controllers
 
             return Request.CreateResponse(status);
         }
-
-        //[Route, HttpPost]
-        //public HttpResponseMessage Add(AddUserRequest model)
-        //{
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-        //    }
-        //    int Id = _service.AddUser(model);
-        //    return Request.CreateResponse(HttpStatusCode.OK, Id);
-        //}
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        _authService.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
-
-        //private IHttpActionResult GetErrorResult(IdentityResult result)
-        //{
-        //    if (result == null)
-        //    {
-        //        return InternalServerError();
-        //    }
-        //    if (!result.Succeeded)
-        //    {
-        //        if (result.Errors != null)
-        //        {
-        //            foreach (string error in result.Errors)
-        //            {
-        //                ModelState.AddModelError("", error);
-        //            }
-        //        }
-        //        if (ModelState.IsValid)
-        //        {
-        //            return BadRequest();
-        //        }
-        //        return BadRequest(ModelState);
-        //    }
-        //    return null;
-        //}
     }
 }
