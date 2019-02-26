@@ -13,16 +13,20 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+import MoreIcon from "@material-ui/icons/MoreVert";
 import { mainListItems, secondaryListItems } from "./ListItems";
 import Container from "./SearchRecipes/Container";
 import * as userService from "../Services/userService";
+import { Avatar, MenuItem, Menu } from "@material-ui/core";
 
 const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
     display: "flex"
+  },
+  avatar: {
+    margin: 10
   },
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed
@@ -96,19 +100,8 @@ const styles = theme => ({
 
 class Dashboard extends React.Component {
   state = {
-    open: true
-  };
-
-  componentDidMount() {
-    userService
-      .getCurrent()
-      .then(this.getCurrentOnSuccess)
-      .catch(this.getCurrentOnSuccess);
-  }
-
-  getCurrentOnSuccess = response => {
-    debugger;
-    console.log(response);
+    open: true,
+    anchorEl: null
   };
 
   handleDrawerOpen = () => {
@@ -119,8 +112,22 @@ class Dashboard extends React.Component {
     this.setState({ open: false });
   };
 
+  handleMenu = e => {
+    this.setState({ anchorEl: e.currentTarget });
+  };
+  closeMenu = () => {
+    this.setState({
+      anchorEl: null
+    });
+  };
+  editUserProfileLink = () => {
+    this.props.history.push("/user/edit");
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, currentUser, logOut } = this.props;
+    const { anchorEl } = this.state;
+    const avatarOpen = Boolean(anchorEl);
 
     return (
       <div className={classes.root}>
@@ -156,10 +163,37 @@ class Dashboard extends React.Component {
             >
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
+            <IconButton
+              color="inherit"
+              aria-owns={avatarOpen ? "menu-appbar-user" : undefined}
+              aria-haspopup="true"
+              onClick={this.handleMenu}
+            >
+              <Avatar alt="Remy Sharp" className={classes.avatar}>
+                {/* Add the user email to the avatar */}
+
+                {currentUser.email && currentUser.email.charAt(0).toUpperCase()}
+
+                <Menu
+                  id="menu-appbar-user"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  open={avatarOpen}
+                  onClose={this.closeMenu}
+                >
+                  <MenuItem onClick={this.editUserProfileLink}>
+                    Edit Profile
+                  </MenuItem>
+                  <MenuItem onClick={logOut}>Log Out</MenuItem>
+                </Menu>
+              </Avatar>
             </IconButton>
           </Toolbar>
         </AppBar>

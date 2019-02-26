@@ -1,18 +1,18 @@
 import axios from "axios";
-let root = "http://localhost:53453/api/users";
-async function registerAsync(payload) {
+
+const register = payload => {
   const config = {
-    url: `${root}/register`,
+    url: "/api/users/register",
     method: "post",
     data: payload
   };
-  const response = await axios(config);
-  return response.data;
-}
+
+  return axios(config);
+};
 
 const getCurrent = () => {
   const config = {
-    url: `/api/users/current`,
+    url: "/api/users/current",
     method: "get",
     headers: { "Content-Type": "application/json" }
   };
@@ -20,15 +20,15 @@ const getCurrent = () => {
   return axios(config);
 };
 
-async function logOut() {
+const logOut = () => {
   const config = {
-    url: `${root}/logout`,
-    method: "get",
+    url: "/api/users/logout",
+    method: "post",
     headers: { "Content-Type": "application/json" }
   };
-  const response = await axios(config);
-  return response.data;
-}
+
+  return axios(config);
+};
 
 const logIn = payload => {
   const config = {
@@ -42,4 +42,4 @@ const logIn = payload => {
   return axios(config);
 };
 
-export { registerAsync, getCurrent, logOut, logIn };
+export { register, getCurrent, logOut, logIn };

@@ -33,8 +33,8 @@ namespace PortfolioWebApi.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
-            _userService.AddUser(model);
-            return Request.CreateResponse(HttpStatusCode.Created);
+            int id = _userService.AddUser(model);
+            return Request.CreateResponse(HttpStatusCode.Created, id);
         }
 
         [Route("login"), HttpPost]
@@ -59,6 +59,11 @@ namespace PortfolioWebApi.Controllers
         public HttpResponseMessage Current()
         {
             var user = _authService.GetCurrentUser();
+            if (user == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            }
             return Request.CreateResponse(HttpStatusCode.OK, user);
         }
 
