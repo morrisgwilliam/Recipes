@@ -1,7 +1,6 @@
 ﻿using PortfolioWebApi.Models;
 using PortfolioWebApi.Models.Domain;
 using PortfolioWebApi.Models.Request;
-using PortfolioWebApi.Models.Request.Recipes;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -37,6 +36,11 @@ namespace PortfolioWebApi.Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserId", data.UserId);
                 cmd.Parameters.AddWithValue("@Title", data.Title);
+                cmd.Parameters.AddWithValue("@Carbs", data.Carbs);
+                cmd.Parameters.AddWithValue("@Calories", data.Calories);
+                cmd.Parameters.AddWithValue("@Fat", data.Fat);
+                cmd.Parameters.AddWithValue("@Protein", data.Protein);
+                cmd.Parameters.AddWithValue("@ApiId", data.ApiId);
                 var steps = new SqlParameter("@Steps", SqlDbType.Structured);
                 if (data.Steps.Any())
                 {
@@ -48,12 +52,12 @@ namespace PortfolioWebApi.Services
             }
         }
 
-        public Paged<Recipe> Get(int userId, int pageIndex, int pageSize, string query)
+        public Paged<Recipe> Get(int userId, int pageIndex, int pageSize, string query = null)
         {
             var recipes = new List<Recipe>();
             var instructionsDictionary = new Dictionary<int, List<Instruction>>();
             int totalCount = 0;
-            
+
             using (var conn = GetConnection())
             {
                 var cmd = conn.CreateCommand();
@@ -67,13 +71,18 @@ namespace PortfolioWebApi.Services
 
                 using (var reader = cmd.ExecuteReader())
                 {
-                    
+
                     // Check the domain model for all props sql metadata returned from selection
                     while (reader.Read())
                     {
                         var recipe = new Recipe();
                         recipe.RecipeId = (int)reader["RecipeId"];
                         recipe.Title = (string)reader["Title"];
+                        recipe.Carbs = (int)reader["Carbs"];
+                        recipe.Calories = (int)reader["Calories"];
+                        recipe.Protein = (int)reader["Protein"];
+                        recipe.Fat = (int)reader["Fat"];
+                        recipe.ApiId = (int)reader["ApiId"];
                         recipes.Add(recipe);
                     }
                     reader.NextResult();
@@ -81,8 +90,8 @@ namespace PortfolioWebApi.Services
                     {
                         var instruction = new Instruction();
                         int recipeId = (int)reader["RecipeId"];
-                        instruction.StepId = (int)reader["StepId"];
-                        instruction.Step = (string)reader["Instructions"];
+                        instruction.StepId = (int)reader["Id"];
+                        instruction.Step = (string)reader["Step"];
                         if (instructionsDictionary.ContainsKey(recipeId))
                         {
                             instructionsDictionary[recipeId].Add(instruction);
@@ -91,7 +100,7 @@ namespace PortfolioWebApi.Services
                         {
                             var instructions = new List<Instruction>();
                             instructions.Add(instruction);
-                            instructionsDictionary.Add(recipeId,instructions);
+                            instructionsDictionary.Add(recipeId, instructions);
                         }
                     }
                     reader.NextResult();
@@ -99,7 +108,7 @@ namespace PortfolioWebApi.Services
                     {
                         totalCount = (int)reader["TotalCount"];
                     }
-                }      
+                }
             }
             // Matches up the dictionary of instructions with the recipes in the list.
             //Necessary because we are getting multiple record sets from sql

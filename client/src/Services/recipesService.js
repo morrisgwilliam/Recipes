@@ -2,7 +2,6 @@ import axios from "axios";
 import queryString from "query-string";
 
 const getByIngredients = payload => {
-  debugger
   let qParams = queryString.stringify(payload.queryParams);
   const config = {
     url: `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?${qParams}`,
@@ -24,4 +23,33 @@ const getRecipe = payload => {
   return axios(config);
 };
 
-export { getByIngredients, getRecipe };
+const getUserRecipes = payload => {
+  const config = {
+    url: "/api/recipes?" + queryString.stringify(payload),
+    method: "GET"
+  };
+  return axios(config);
+};
+const addUserRecipes = payload => {
+  const config = {
+    url: "/api/recipes",
+    method: "POST",
+    data: payload
+  };
+  return axios(config);
+};
+const deleteUserRecipe = payload => {
+  const config = {
+    url: `/api/recipes/${payload.RecipeId}/${payload.UserId}`,
+    method: "DELETE"
+  };
+  return axios(config);
+};
+
+export {
+  getByIngredients,
+  getRecipe,
+  getUserRecipes,
+  addUserRecipes,
+  deleteUserRecipe
+};

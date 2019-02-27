@@ -24,10 +24,11 @@ class Container extends React.PureComponent {
       showTable: false
     };
   }
+
   getSimpleTable = () =>
     this.state.showTable ? (
       <div className={this.props.classes.tableContainer}>
-        <SimpleTable recipes={this.state.recipes} />{" "}
+        <SimpleTable {...this.props.currentUser} recipes={this.state.recipes} />
       </div>
     ) : (
       ""
@@ -87,8 +88,8 @@ class Container extends React.PureComponent {
     });
   };
   getRecipesOnError = response => {
-console.log(response)
-    }
+    console.log(response);
+  };
   render() {
     const { classes } = this.props;
     const { anchorEl, diet, ingredients } = this.state;

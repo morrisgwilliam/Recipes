@@ -191,10 +191,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Domain\Instruction.cs" />
+    <Compile Include="Models\Domain\Recipe.cs" />
     <Compile Include="Models\Domain\UserBase.cs" />
-    <Compile Include="Models\Domain\QuestionModel.cs" />
     <Compile Include="Models\Domain\Tip.cs" />
+    <Compile Include="Models\Paged.cs" />
     <Compile Include="Models\Request\Recipes\AddRecipeRequest.cs" />
+    <Compile Include="Models\Request\Recipes\GetRecipesRequest.cs" />
     <Compile Include="Models\Request\Users\AddUserRequest.cs" />
     <Compile Include="Models\Request\Users\UserLogInRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

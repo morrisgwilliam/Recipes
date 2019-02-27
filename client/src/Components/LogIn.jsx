@@ -27,7 +27,6 @@ class LogInForm extends React.Component {
     });
   };
   logIn = () => {
-    debugger;
     const payload = {
       EmailAddress: this.state.EmailAddress,
       Password: this.state.Password
@@ -38,11 +37,9 @@ class LogInForm extends React.Component {
       .catch(this.onLogInError);
   };
   onLogInSuccess = () => {
-    debugger;
-    this.props.history.push("/dashboard", { action: "USERLOGIN" });
+    this.props.history.push("/dashboard");
   };
   onLogInerror = response => {
-    debugger;
     console.log(response);
   };
   render() {

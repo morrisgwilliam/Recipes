@@ -16,6 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import * as recipeService from "../../Services/recipesService";
 import Button from "@material-ui/core/Button";
 import MuiDialogActions from "@material-ui/core/DialogActions";
+import Image from "material-ui-image";
 
 const styles = {
   root: {
@@ -113,8 +114,33 @@ class SimpleTable extends React.Component {
       );
     }
   };
+  addRecipe = () => {
+    const { selectedRecipe } = this.state;
+    const payload = {
+      ApiId: selectedRecipe.id,
+      UserId: this.props.id,
+      Title: selectedRecipe.title,
+      Carbs: 0,
+      Fat: 0,
+      Protein: 0,
+      Calories: 0,
+      Steps: []
+    };
+    const recipeSteps = JSON.parse(
+      JSON.stringify(selectedRecipe.analyzedInstructions[0].steps)
+    );
+    for (let i = 0; i < recipeSteps.length; i++) {
+      payload.Steps.push(recipeSteps[i].step);
+    }
+    recipeService
+      .addUserRecipes(payload)
+      .then(this.handleClose)
+      .catch(this.addRecipeOnError);
+  };
+  addRecipeOnError = response => {
+    console.log(response);
+  };
   getRecipeOnSuccess = response => {
-    console.log(response.data);
     this.setState({
       open: true,
       selectedRecipe: response.data
@@ -145,18 +171,25 @@ class SimpleTable extends React.Component {
             {this.state.selectedRecipe.title}
           </DialogTitle>
           <DialogContent>
-            {this.state.selectedRecipe.analyzedInstructions[0].steps.map(
-              (step, index) => {
-                return (
-                  <Typography gutterBottom key={index}>
-                    {step.step}
-                  </Typography>
-                );
-              }
-            )}
+            <div>
+              <Image src={this.state.selectedRecipe.image} />
+            </div>
+            <ol>
+              {this.state.selectedRecipe.analyzedInstructions[0].steps.map(
+                (step, index) => {
+                  return (
+                    <li>
+                      <Typography gutterBottom key={index}>
+                        {step.step}
+                      </Typography>
+                    </li>
+                  );
+                }
+              )}
+            </ol>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.addRecipe} color="primary">
               Add To My Recipes
             </Button>
           </DialogActions>

@@ -44,10 +44,10 @@ namespace PortfolioWebApi.Controllers
             Paged<Recipe> pagedRecipes = _service.Get(userId, pageIndex, pageSize, query);
             return Request.CreateResponse(HttpStatusCode.OK, pagedRecipes);
         }
-        [Route("{recipeId}"), HttpDelete]
+        [Route("{recipeId}/{userId}"), HttpDelete]
         public HttpResponseMessage Delete(int recipeId, int userId)
         {
-            if(recipeId == 0 || userId == 0)
+            if (recipeId == 0 || userId == 0)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Must provide a recipe Id and a user Id");
             }

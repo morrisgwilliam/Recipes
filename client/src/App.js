@@ -5,6 +5,8 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import LogIn from "./Components/LogIn";
 import Register from "./Components/Register";
 import Dashboard from "./Components/Dashboard";
+import MyRecipes from "./Components/MyRecipes";
+import Navigation from "./Components/Navigation";
 
 class App extends Component {
   constructor(props) {
@@ -17,6 +19,7 @@ class App extends Component {
   componentDidMount() {
     this.getCurrentUser();
   }
+
   getCurrentUser = () => {
     userService
       .getCurrent()
@@ -24,7 +27,6 @@ class App extends Component {
       .catch(this.getCurrentOnError);
   };
   getCurrentOnSuccess = response => {
-    debugger;
     console.log(response);
     this.setState({
       isAuthorized: true,
@@ -32,7 +34,6 @@ class App extends Component {
     });
   };
   getCurrentOnError = response => {
-    debugger;
     console.log(response);
     this.props.history.push("/login");
     this.setState({
@@ -40,32 +41,28 @@ class App extends Component {
       currentUser: {}
     });
   };
+  setAuthorized = () => {
+    this.setState({
+      isAuthorized: true
+    });
+  };
   logOut = () => {
-    debugger;
     userService
       .logOut()
       .then(this.getCurrentUser)
       .catch(this.getCurrentOnError);
   };
   logOutOnError = response => {
-    debugger;
     console.log(response);
   };
   getRoutes = () => {
     if (this.state.isAuthorized) {
       return (
         <React.Fragment>
-          <Route exact path="/login" render={props => <LogIn {...props} />} />
           <Route
-            exact
-            path="/register"
-            render={props => <Register {...props} />}
-          />
-          <Route
-            exact
-            path="/dashboard"
+            path="/"
             render={props => (
-              <Dashboard
+              <Navigation
                 {...props}
                 currentUser={this.state.currentUser}
                 logOut={this.logOut}
@@ -77,7 +74,13 @@ class App extends Component {
     } else {
       return (
         <React.Fragment>
-          <Route exact path="/login" render={props => <LogIn {...props} />} />
+          <Route
+            exact
+            path="/login"
+            render={props => (
+              <LogIn {...props} setAuthorized={this.setAuthorized} />
+            )}
+          />
           <Route
             exact
             path="/register"
