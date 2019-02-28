@@ -13,7 +13,7 @@ import Menu from "@material-ui/core/Menu";
 import SimpleTable from "./SimpleTable";
 import * as recipeService from "../../Services/recipesService";
 
-class Container extends React.PureComponent {
+class FindRecipes extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,14 +25,6 @@ class Container extends React.PureComponent {
     };
   }
 
-  getSimpleTable = () =>
-    this.state.showTable ? (
-      <div className={this.props.classes.tableContainer}>
-        <SimpleTable {...this.props.currentUser} recipes={this.state.recipes} />
-      </div>
-    ) : (
-      ""
-    );
   setIngredients = e => {
     this.setState({
       includeIngredients: e.target.value
@@ -96,6 +88,7 @@ class Container extends React.PureComponent {
     const open = Boolean(anchorEl);
     return (
       <div className={classes.root}>
+      <main className={classes.content}>
         <AppBar position="static">
           <Toolbar>
             <Typography
@@ -154,10 +147,14 @@ class Container extends React.PureComponent {
           </Toolbar>
         </AppBar>
 
-        {this.getSimpleTable()}
+        <div className={this.props.classes.tableContainer}>
+        <SimpleTable {...this.props.currentUser} recipes={this.state.recipes} />
       </div>
+      </main>
+      </div>
+      
     );
   }
 }
 
-export default withStyles(getStyles)(Container);
+export default withStyles(getStyles)(FindRecipes);

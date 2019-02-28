@@ -3,9 +3,6 @@ const styles = theme => ({
   root: {
     display: "flex"
   },
-  avatar: {
-    margin: 10
-  },
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed
   },

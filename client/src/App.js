@@ -4,8 +4,6 @@ import * as userService from "../src/Services/userService";
 import { Route, Switch, withRouter } from "react-router-dom";
 import LogIn from "./Components/LogIn";
 import Register from "./Components/Register";
-import Dashboard from "./Components/Dashboard";
-import MyRecipes from "./Components/MyRecipes";
 import Navigation from "./Components/Navigation";
 
 class App extends Component {

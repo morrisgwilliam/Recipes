@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,12 +11,9 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "./ListItems";
 import { Avatar, MenuItem, Menu } from "@material-ui/core";
 import styles from "../Styles/Materials/DashHeader";
 import { Route } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import MyRecipes from "./MyRecipes";
 import mainList from "../componentList";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
@@ -113,7 +109,7 @@ class Navigation extends React.PureComponent {
               noWrap
               className={classes.title}
             >
-              Dashboard
+              Recipes
             </Typography>
 
             <IconButton
@@ -122,8 +118,7 @@ class Navigation extends React.PureComponent {
               aria-haspopup="true"
               onClick={this.handleMenu}
             >
-              <Avatar alt="Remy Sharp" className={classes.avatar}>
-                {/* Add the user email to the avatar */}
+              <Avatar alt="Remy Sharp">
 
                 {currentUser.email && currentUser.email.charAt(0).toUpperCase()}
 
@@ -167,26 +162,12 @@ class Navigation extends React.PureComponent {
             </IconButton>
           </div>
           <Divider />
-          <List>{mainListItems}</List>
-          {mainList.map(this.navBarRoutes)}
-          <Divider />
-          <List>{secondaryListItems}</List>
+          <List className={classes.appBarSpacer}>{mainList.map(this.navBarRoutes)}</List>
         </Drawer>
         <div className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Route
-            path="/dashboard"
-            exact
-            render={props => (
-              <Dashboard
-                {...props}
-                currentUser={this.state.currentUser}
-                logOut={this.logOut}
-              />
-            )}
-          />
-          {mainList.map(this.mapRoutes)}
+        <div className={classes.appBarSpacer} />
           {/* rendering all routes */}
+          {mainList.map(this.mapRoutes)}
         </div>
       </div>
     );

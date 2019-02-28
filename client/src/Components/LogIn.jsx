@@ -37,7 +37,7 @@ class LogInForm extends React.Component {
       .catch(this.onLogInError);
   };
   onLogInSuccess = () => {
-    this.props.history.push("/dashboard");
+    this.props.history.push("/myrecipes");
   };
   onLogInerror = response => {
     console.log(response);
