@@ -20,77 +20,87 @@ class MyRecipes extends React.PureComponent {
       showTable: false
     };
   }
-componentDidMount(){
-  recipeService.getUserRecipes({
-    userId: this.props.id,
-    pageIndex: 0,
-    pageSize: 5
-  }).then(this.onGetUserRecipesSuccess).catch(this.onGetUserRecipesOnError)
-}
-
-onGetUserRecipesSuccess = ({data}) => {
-  this.setState({
-    recipes: data.PagedItems,
-    paged: {
-      pageIndex: data.PageIndex,
-      pageSize: data.PageSize,
-      totalCount: data.TotalCount,
-      totalPages: data.TotalPages,
-      hasPrevious: data.HasPreviousPage,
-      hasNext: data.HasNextPage
+  componentDidMount() {
+    recipeService
+      .getUserRecipes({
+        userId: this.props.currentUser.id,
+        pageIndex: 0,
+        pageSize: 5
+      })
+      .then(this.onGetUserRecipesSuccess)
+      .catch(this.onGetUserRecipesOnError);
   }
-  })
-}
-onGetUserRecipesOnError = response => console.log(response);
+
+  onGetUserRecipesSuccess = ({ data }) => {
+    debugger;
+    this.setState({
+      recipes: data.pagedItems,
+      paged: {
+        pageIndex: data.pageIndex,
+        pageSize: data.pageSize,
+        totalCount: data.totalCount,
+        totalPages: data.totalPages,
+        hasPrevious: data.hasPreviousPage,
+        hasNext: data.hasNextPage
+      }
+    });
+  };
+  onGetUserRecipesOnError = response => console.log(response);
+
   setIngredients = e => {
     this.setState({
       includeIngredients: e.target.value
     });
   };
 
-setQuery = e => {
-  this.setState({
-    query: e.target.value
-  })
-}
+  setQuery = e => {
+    this.setState({
+      query: e.target.value
+    });
+  };
 
   render() {
     const { classes } = this.props;
-    const {  query } = this.state;
+    const { query } = this.state;
     return (
       <div className={classes.root}>
-      <main className={classes.content}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography
-              className={classes.title}
-              variant="h6"
-              color="inherit"
-              noWrap
-            >
-              My Recipes
-            </Typography>
-            <div className={classes.grow} />
-            <div className={classes.search}>
-              <InputBase
-                placeholder="Search ..."
-                value={query}
-                onChange={this.setQuery}
-                classes={{ root: classes.inputRoot, input: classes.inputInput }}
-              />
-            </div>
-            <IconButton color="inherit" onClick={this.getRecipes}>
-              <SearchIcon />
-            </IconButton>          
-          </Toolbar>
-        </AppBar>
+        <main className={classes.content}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography
+                className={classes.title}
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
+                My Recipes
+              </Typography>
+              <div className={classes.grow} />
+              <div className={classes.search}>
+                <InputBase
+                  placeholder="Search ..."
+                  value={query}
+                  onChange={this.setQuery}
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput
+                  }}
+                />
+              </div>
+              <IconButton color="inherit" onClick={this.getRecipes}>
+                <SearchIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
 
-        <div className={this.props.classes.tableContainer}>
-        <MyRecipesTable {...this.props.currentUser} recipes={this.state.recipes} />
+          <div className={this.props.classes.tableContainer}>
+            <MyRecipesTable
+              {...this.props.currentUser}
+              recipes={this.state.recipes}
+            />
+          </div>
+        </main>
       </div>
-      </main>
-      </div>
-      
     );
   }
 }

@@ -77,13 +77,13 @@ class MyRecipesTable extends React.Component {
     open: false,
     selectedRecipe: null
   };
-  mapRecipe = recipe => {
+  mapRecipe = (recipe, index) => {
     if (recipe.calories) {
       return (
         <TableRow
           hover={true}
           key={recipe.id}
-          id={recipe.id}
+          id={index}
           onClick={this.handleClickOpen}
         >
           <TableCell component="th" scope="row">
@@ -100,7 +100,7 @@ class MyRecipesTable extends React.Component {
         <TableRow
           hover={true}
           key={recipe.id}
-          id={recipe.id}
+          id={index}
           onClick={this.handleClickOpen}
         >
           <TableCell component="th" scope="row">
@@ -115,30 +115,35 @@ class MyRecipesTable extends React.Component {
     }
   };
 
-deleteRecipe = () => {
-    recipeService.deleteUserRecipe({
-        Userid: this.props.id,
-        RecipeId: this.state.selectedRecipe.RecipeId
-    }).then(this.onDeleteRecipeSuccess).catch(this.onDeleteRecipeError)
-}
+  deleteRecipe = () => {
+    debugger;
+    recipeService
+      .deleteUserRecipe({
+        userId: this.props.id,
+        recipeId: this.state.selectedRecipe.recipeId
+      })
+      .then(this.onDeleteRecipeSuccess)
+      .catch(this.onDeleteRecipeError);
+  };
 
-onDeleteRecipeSuccess = () => {
+  onDeleteRecipeSuccess = () => {
     this.setState({ open: false });
-    
-}
-onDeleteRecipeError = response => console.log(response)
+  };
+  onDeleteRecipeError = response => console.log(response);
 
   handleClickOpen = e => {
-    recipeService
-      .getRecipe(e.currentTarget.id)
-      .then(this.getRecipeOnSuccess)
-      .catch(this.getRecipeOnError);
+    let index = parseInt(e.currentTarget.id);
+    this.setState({
+      selectedRecipe: this.props.recipes[index],
+      open: true
+    });
   };
 
   handleClose = () => {
     this.setState({ open: false });
   };
   getDialog = () => {
+    debugger;
     if (this.state.selectedRecipe) {
       return (
         <Dialog
@@ -150,25 +155,21 @@ onDeleteRecipeError = response => console.log(response)
             {this.state.selectedRecipe.title}
           </DialogTitle>
           <DialogContent>
-            <div>
-              {/* <Image src={this.state.selectedRecipe.image} /> */}
-            </div>
+            <div>{/* <Image src={this.state.selectedRecipe.image} /> */}</div>
             <ol>
-              {this.state.selectedRecipe.analyzedInstructions[0].steps.map(
-                (step, index) => {
-                  return (
-                    <li>
-                      <Typography gutterBottom key={index}>
-                        {step.Instructions}
-                      </Typography>
-                    </li>
-                  );
-                }
-              )}
+              {this.state.selectedRecipe.instructions.map((body, index) => {
+                return (
+                  <li>
+                    <Typography gutterBottom key={index}>
+                      {body.step}
+                    </Typography>
+                  </li>
+                );
+              })}
             </ol>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.addRecipe} color="primary">
+            <Button onClick={this.deleteRecipe} color="primary">
               Remove From My Recipes
             </Button>
           </DialogActions>
@@ -199,7 +200,9 @@ onDeleteRecipeError = response => console.log(response)
                 <TableRow>
                   <TableCell />
                   <TableCell />
-                  <TableCell align="center">You don't have any recipes.</TableCell>
+                  <TableCell align="center">
+                    You don't have any recipes.
+                  </TableCell>
                   <TableCell />
                   <TableCell />
                 </TableRow>
