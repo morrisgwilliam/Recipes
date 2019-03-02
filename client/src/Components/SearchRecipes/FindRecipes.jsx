@@ -25,6 +25,10 @@ class FindRecipes extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    debugger;
+  }
+
   setIngredients = e => {
     this.setState({
       includeIngredients: e.target.value
@@ -88,73 +92,74 @@ class FindRecipes extends React.PureComponent {
     const open = Boolean(anchorEl);
     return (
       <div className={classes.root}>
-      <main className={classes.content}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography
-              className={classes.title}
-              variant="h6"
-              color="inherit"
-              noWrap
-            >
-              {`${diet} Recipes`}
-            </Typography>
-            <div className={classes.grow} />
-            <div className={classes.search}>
-              <InputBase
-                placeholder="Search ..."
-                value={ingredients}
-                onChange={this.setIngredients}
-                classes={{ root: classes.inputRoot, input: classes.inputInput }}
-              />
-            </div>
-            <IconButton color="inherit" onClick={this.getRecipes}>
-              <SearchIcon />
-            </IconButton>
-            <IconButton
-              aria-owns={open ? "menu-appbar" : undefined}
-              aria-haspopup="true"
-              onClick={this.handleMenu}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              open={open}
-              onClose={this.closeMenu}
-            >
-              <MenuItem onClick={this.setDiet.bind(this, "Pescetarian")}>
-                Pescetarian
-              </MenuItem>
-              <MenuItem onClick={this.setDiet.bind(this, "Vegan")}>
-                Vegan
-              </MenuItem>
-              <MenuItem onClick={this.setDiet.bind(this, "Vegetarian")}>
-                Vegetarian
-              </MenuItem>
-              <MenuItem onClick={this.setDiet.bind(this, "")}>None</MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
+        <main className={classes.content}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography
+                className={classes.title}
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
+                {`${diet} Recipes`}
+              </Typography>
+              <div className={classes.grow} />
+              <div className={classes.search}>
+                <InputBase
+                  placeholder="Search ..."
+                  value={ingredients}
+                  onChange={this.setIngredients}
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput
+                  }}
+                />
+              </div>
+              <IconButton color="inherit" onClick={this.getRecipes}>
+                <SearchIcon />
+              </IconButton>
+              <IconButton
+                aria-owns={open ? "menu-appbar" : undefined}
+                aria-haspopup="true"
+                onClick={this.handleMenu}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }}
+                open={open}
+                onClose={this.closeMenu}
+              >
+                <MenuItem onClick={this.setDiet.bind(this, "Pescetarian")}>
+                  Pescetarian
+                </MenuItem>
+                <MenuItem onClick={this.setDiet.bind(this, "Vegan")}>
+                  Vegan
+                </MenuItem>
+                <MenuItem onClick={this.setDiet.bind(this, "Vegetarian")}>
+                  Vegetarian
+                </MenuItem>
+                <MenuItem onClick={this.setDiet.bind(this, "")}>None</MenuItem>
+              </Menu>
+            </Toolbar>
+          </AppBar>
 
-        <div className={this.props.classes.tableContainer}>
-        <SimpleTable {...this.props.currentUser} recipes={this.state.recipes} />
+          <div className={this.props.classes.tableContainer}>
+            <SimpleTable id={this.props.id} recipes={this.state.recipes} />
+          </div>
+        </main>
       </div>
-      </main>
-      </div>
-      
     );
   }
 }
-
 export default withStyles(getStyles)(FindRecipes);

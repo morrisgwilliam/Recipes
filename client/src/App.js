@@ -25,14 +25,12 @@ class App extends Component {
       .catch(this.getCurrentOnError);
   };
   getCurrentOnSuccess = response => {
-    console.log(response);
     this.setState({
       isAuthorized: true,
       currentUser: response.data
     });
   };
-  getCurrentOnError = response => {
-    console.log(response);
+  getCurrentOnError = () => {
     this.props.history.push("/login");
     this.setState({
       isAuthorized: false,
@@ -57,15 +55,10 @@ class App extends Component {
     if (this.state.isAuthorized) {
       return (
         <React.Fragment>
-          <Route
-            path="/"
-            render={props => (
-              <Navigation
-                {...props}
-                currentUser={this.state.currentUser}
-                logOut={this.logOut}
-              />
-            )}
+          <Navigation
+            {...this.props}
+            currentUser={this.state.currentUser}
+            logOut={this.logOut}
           />
         </React.Fragment>
       );

@@ -21,18 +21,22 @@ class MyRecipes extends React.PureComponent {
     };
   }
   componentDidMount() {
+    debugger;
+    this.getUserRecipes();
+  }
+
+  getUserRecipes = () => {
     recipeService
       .getUserRecipes({
-        userId: this.props.currentUser.id,
+        userId: this.props.id,
         pageIndex: 0,
         pageSize: 5
       })
       .then(this.onGetUserRecipesSuccess)
       .catch(this.onGetUserRecipesOnError);
-  }
+  };
 
   onGetUserRecipesSuccess = ({ data }) => {
-    debugger;
     this.setState({
       recipes: data.pagedItems,
       paged: {
@@ -97,6 +101,7 @@ class MyRecipes extends React.PureComponent {
             <MyRecipesTable
               {...this.props.currentUser}
               recipes={this.state.recipes}
+              getUserRecipes={this.getUserRecipes}
             />
           </div>
         </main>

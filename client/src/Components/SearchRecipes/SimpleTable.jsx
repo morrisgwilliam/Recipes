@@ -115,6 +115,7 @@ class SimpleTable extends React.Component {
     }
   };
   addRecipe = () => {
+    debugger;
     const { selectedRecipe } = this.state;
     const payload = {
       ApiId: selectedRecipe.id,
@@ -178,10 +179,8 @@ class SimpleTable extends React.Component {
               {this.state.selectedRecipe.analyzedInstructions[0].steps.map(
                 (step, index) => {
                   return (
-                    <li>
-                      <Typography gutterBottom key={index}>
-                        {step.step}
-                      </Typography>
+                    <li key={index}>
+                      <Typography gutterBottom>{step.step}</Typography>
                     </li>
                   );
                 }

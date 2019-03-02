@@ -16,7 +16,6 @@ import Typography from "@material-ui/core/Typography";
 import * as recipeService from "../../Services/recipesService";
 import Button from "@material-ui/core/Button";
 import MuiDialogActions from "@material-ui/core/DialogActions";
-import Image from "material-ui-image";
 
 const styles = {
   root: {
@@ -72,24 +71,27 @@ const DialogActions = withStyles(theme => ({
   }
 }))(MuiDialogActions);
 
-class MyRecipesTable extends React.Component {
+class MyRecipesTable extends React.PureComponent {
   state = {
     open: false,
     selectedRecipe: null
   };
+
   mapRecipe = (recipe, index) => {
     if (recipe.calories) {
       return (
         <TableRow
           hover={true}
-          key={recipe.id}
+          key={index}
           id={index}
           onClick={this.handleClickOpen}
         >
           <TableCell component="th" scope="row">
             {recipe.title}
           </TableCell>
-          <TableCell align="right">{recipe.calories}</TableCell>
+          <TableCell component="td" align="right">
+            {recipe.calories}
+          </TableCell>
           <TableCell align="right">{recipe.fat}</TableCell>
           <TableCell align="right">{recipe.carbs}</TableCell>
           <TableCell align="right">{recipe.protein}</TableCell>
@@ -99,7 +101,7 @@ class MyRecipesTable extends React.Component {
       return (
         <TableRow
           hover={true}
-          key={recipe.id}
+          key={index}
           id={index}
           onClick={this.handleClickOpen}
         >
@@ -116,7 +118,6 @@ class MyRecipesTable extends React.Component {
   };
 
   deleteRecipe = () => {
-    debugger;
     recipeService
       .deleteUserRecipe({
         userId: this.props.id,
@@ -127,6 +128,7 @@ class MyRecipesTable extends React.Component {
   };
 
   onDeleteRecipeSuccess = () => {
+    this.props.getUserRecipes();
     this.setState({ open: false });
   };
   onDeleteRecipeError = response => console.log(response);
@@ -143,7 +145,6 @@ class MyRecipesTable extends React.Component {
     this.setState({ open: false });
   };
   getDialog = () => {
-    debugger;
     if (this.state.selectedRecipe) {
       return (
         <Dialog
@@ -155,14 +156,11 @@ class MyRecipesTable extends React.Component {
             {this.state.selectedRecipe.title}
           </DialogTitle>
           <DialogContent>
-            <div>{/* <Image src={this.state.selectedRecipe.image} /> */}</div>
             <ol>
               {this.state.selectedRecipe.instructions.map((body, index) => {
                 return (
-                  <li>
-                    <Typography gutterBottom key={index}>
-                      {body.step}
-                    </Typography>
+                  <li key={index}>
+                    <Typography gutterBottom>{body.step}</Typography>
                   </li>
                 );
               })}

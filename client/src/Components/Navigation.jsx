@@ -18,6 +18,11 @@ import mainList from "../componentList";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { Nav, NavItem, NavLink } from "reactstrap";
+import { Link } from "react-router-dom";
+import FindRecipes from "./SearchRecipes/FindRecipes";
+
+import { Switch } from "react-router-dom";
 
 class Navigation extends React.PureComponent {
   state = {
@@ -25,14 +30,31 @@ class Navigation extends React.PureComponent {
     anchorEl: null
   };
 
+  componentDidMount() {
+    this.getComponents();
+  }
+
+  getComponents = () =>
+    this.setState({
+      component: (
+        <Route
+          {...this.props}
+          exact
+          path="/findrecipes"
+          component={props => <FindRecipes {...this.props.currentUser} />}
+        />
+      )
+    });
+
   mapRoutes = (route, index) => {
     return (
       <Route
-        key={index}
         {...this.props}
         exact
         path={route.path}
-        component={props => <route.component {...props} {...this.props} />}
+        component={props => (
+          <route.component key={index} {...props} {...this.props.currentUser} />
+        )}
       />
     );
   };
@@ -42,8 +64,7 @@ class Navigation extends React.PureComponent {
     if (route.nav) {
       return (
         <ListItem
-          {...this.props}
-          key={index}
+          key={index + 50}
           button
           onClick={() => this.redirect(route.path)}
         >
@@ -63,6 +84,7 @@ class Navigation extends React.PureComponent {
   };
 
   handleMenu = e => {
+    console.log(e.currentTarget);
     this.setState({ anchorEl: e.currentTarget });
   };
   closeMenu = () => {
@@ -75,7 +97,7 @@ class Navigation extends React.PureComponent {
   };
   render() {
     const { classes, currentUser, logOut } = this.props;
-    const { anchorEl } = this.state;
+    const { anchorEl, component } = this.state;
     const avatarOpen = Boolean(anchorEl);
     return (
       <div className={classes.root}>
@@ -111,38 +133,36 @@ class Navigation extends React.PureComponent {
             >
               Recipes
             </Typography>
-
             <IconButton
+              type="button"
               color="inherit"
               aria-owns={avatarOpen ? "menu-appbar-user" : undefined}
               aria-haspopup="true"
               onClick={this.handleMenu}
             >
               <Avatar alt="Remy Sharp">
-
                 {currentUser.email && currentUser.email.charAt(0).toUpperCase()}
-
-                <Menu
-                  id="menu-appbar-user"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                  }}
-                  open={avatarOpen}
-                  onClose={this.closeMenu}
-                >
-                  <MenuItem onClick={this.editUserProfileLink}>
-                    Edit Profile
-                  </MenuItem>
-                  <MenuItem onClick={logOut}>Log Out</MenuItem>
-                </Menu>
               </Avatar>
             </IconButton>
+            <Menu
+              id="menu-appbar-user"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              open={avatarOpen}
+              onClose={this.closeMenu}
+            >
+              <MenuItem onClick={this.editUserProfileLink}>
+                Edit Profile
+              </MenuItem>
+              <MenuItem onClick={logOut}>Log Out</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
 
@@ -162,12 +182,16 @@ class Navigation extends React.PureComponent {
             </IconButton>
           </div>
           <Divider />
-          <List className={classes.appBarSpacer}>{mainList.map(this.navBarRoutes)}</List>
+          <List className={classes.appBarSpacer}>
+            {mainList.map(this.navBarRoutes)}
+          </List>
         </Drawer>
         <div className={classes.content}>
-        <div className={classes.appBarSpacer} />
+          <div className={classes.appBarSpacer} />
           {/* rendering all routes */}
-          {mainList.map(this.mapRoutes)}
+          <Link to="/findrecipes">my recipes</Link>
+          {component && component}
+          {/* <Switch>{mainList.map(this.mapRoutes)}</Switch> */}
         </div>
       </div>
     );

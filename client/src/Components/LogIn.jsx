@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import FormControl from "@material-ui/core/FormControl";
@@ -8,7 +7,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
-import SelectAllTwoTone from "@material-ui/icons/SelectAllTwoTone";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -16,6 +14,7 @@ import * as userService from "../Services/userService";
 import { Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 import styles from "../Styles/Materials/Form";
+import RecipesSVG from "./RecipesSVG";
 
 const MyLink = props => <RouterLink {...props} to="/register" />;
 
@@ -38,6 +37,7 @@ class LogInForm extends React.Component {
   };
   onLogInSuccess = () => {
     this.props.history.push("/myrecipes");
+    this.props.setAuthorized();
   };
   onLogInerror = response => {
     console.log(response);
@@ -49,9 +49,7 @@ class LogInForm extends React.Component {
       <main className={classes.main}>
         <CssBaseline />
         <Paper className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <SelectAllTwoTone />
-          </Avatar>
+          <RecipesSVG class="st0 svgLogIn" viewBox="0 0 213 60" />
           <Typography component="h1" variant="h5">
             {this.props.location.state
               ? "Sign In With Your New Account"

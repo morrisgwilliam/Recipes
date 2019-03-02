@@ -1,0 +1,32 @@
+.svgLogIn {
+  stroke: #2e3192;
+  fill: #2e3192;
+  stroke-dasharray: 400;
+  opacity: 10;
+  animation: animate 3s cubic-bezier(0, 0.23, 1, 0.1);
+}
+.st0 {
+  fill: #2e3192;
+  stroke: #2e3192;
+}
+
+@keyframes animate {
+  0% {
+    opacity: 0;
+    fill: none;
+    stroke-dashoffset: 400;
+  }
+  30% {
+    opacity: 10;
+    fill: none;
+    stroke-dashoffset: 400;
+  }
+  90% {
+    fill: #2e3192;
+  }
+  100% {
+    opacity: 10;
+    fill: #2e3192;
+    stroke-dashoffset: 0;
+  }
+}

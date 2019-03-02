@@ -1,6 +1,5 @@
 import React from "react";
 import { Paper } from "@material-ui/core";
-import posed from "react-pose";
 import Typography from "@material-ui/core/Typography";
 import "../../Styles/Pose/list.css";
 import Button from "@material-ui/core/Button";
