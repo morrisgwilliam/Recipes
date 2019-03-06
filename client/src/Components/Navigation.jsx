@@ -18,11 +18,7 @@ import mainList from "../componentList";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { Nav, NavItem, NavLink } from "reactstrap";
 import { Link } from "react-router-dom";
-import FindRecipes from "./SearchRecipes/FindRecipes";
-
-import { Switch } from "react-router-dom";
 
 class Navigation extends React.PureComponent {
   state = {
@@ -30,34 +26,6 @@ class Navigation extends React.PureComponent {
     anchorEl: null
   };
 
-  componentDidMount() {
-    this.getComponents();
-  }
-
-  getComponents = () =>
-    this.setState({
-      component: (
-        <Route
-          {...this.props}
-          exact
-          path="/findrecipes"
-          component={props => <FindRecipes {...this.props.currentUser} />}
-        />
-      )
-    });
-
-  mapRoutes = (route, index) => {
-    return (
-      <Route
-        {...this.props}
-        exact
-        path={route.path}
-        component={props => (
-          <route.component key={index} {...props} {...this.props.currentUser} />
-        )}
-      />
-    );
-  };
   redirect = path => this.props.history.push(path);
 
   navBarRoutes = (route, index) => {
@@ -96,8 +64,8 @@ class Navigation extends React.PureComponent {
     this.props.history.push("/user/edit");
   };
   render() {
-    const { classes, currentUser, logOut } = this.props;
-    const { anchorEl, component } = this.state;
+    const { classes, currentUser, logOut, children } = this.props;
+    const { anchorEl } = this.state;
     const avatarOpen = Boolean(anchorEl);
     return (
       <div className={classes.root}>
@@ -188,10 +156,9 @@ class Navigation extends React.PureComponent {
         </Drawer>
         <div className={classes.content}>
           <div className={classes.appBarSpacer} />
-          {/* rendering all routes */}
-          <Link to="/findrecipes">my recipes</Link>
-          {component && component}
-          {/* <Switch>{mainList.map(this.mapRoutes)}</Switch> */}
+
+          {children}
+
         </div>
       </div>
     );

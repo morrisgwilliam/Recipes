@@ -15,11 +15,18 @@ import { Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 import styles from "../Styles/Materials/Form";
 import RecipesSVG from "./RecipesSVG";
+import * as schemas from "../Models/accountSchemas"
+import {Formik} from 'formik'
 
 const MyLink = props => <RouterLink {...props} to="/register" />;
 
 class LogInForm extends React.Component {
-  state = {};
+  constructor(props){
+    super(props);
+    this.state = {};
+    this.validation = schemas.getLogInSchema
+    this.state.intialValues = schemas.getLogInSchema.initialValues   
+  }
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -36,7 +43,7 @@ class LogInForm extends React.Component {
       .catch(this.onLogInError);
   };
   onLogInSuccess = () => {
-    this.props.history.push("/myrecipes");
+    this.props.history.push("/");
     this.props.setAuthorized();
   };
   onLogInerror = response => {
@@ -55,16 +62,26 @@ class LogInForm extends React.Component {
               ? "Sign In With Your New Account"
               : "Sign In"}
           </Typography>
-          <form className={classes.form}>
+          <Formik initialValues={this.state.initialValues} onSubmit={this.logIn} validationSchema={this.validation()}>
+          {props => {
+            const {
+              values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit
+            } = props;
+          
+          return (
+          <form className={classes.form} onSubmit={this.logIn}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="EmailAddress">Email Address</InputLabel>
+              <InputLabel htmlFor="EmailAddress">{errors.EmailAddress && touched.EmailAddress? errors.EmailAddress : "Email Address"}</InputLabel>
               <Input
                 id="EmailAddress"
                 name="EmailAddress"
                 //autoComplete="EmailAddress"
                 placeholder="Email Address"
                 autoFocus
-                onChange={this.handleChange}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.EmailAddress}
+                error={errors.EmailAddress && touched.EmailAddress? true : false}
               />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
@@ -94,6 +111,8 @@ class LogInForm extends React.Component {
               Sign in
             </Button>
           </form>
+          )}}
+          </Formik>
         </Paper>
       </main>
     );
