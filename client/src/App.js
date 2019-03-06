@@ -5,6 +5,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import LogIn from "./Components/LogIn";
 import Register from "./Components/Register";
 import Navigation from "./Components/Navigation";
+import mainList from './componentList'
 
 class App extends Component {
   constructor(props) {
@@ -14,6 +15,18 @@ class App extends Component {
       currentUser: {}
     };
   }
+
+  getComponents = (route, index) =>
+ (
+      <Route
+      key={index}
+        {...this.props}
+        exact
+        path={route.path}
+        render={props => <route.component {...this.props.currentUser} {...props}/>}
+      />
+    )
+
   componentDidMount() {
     this.getCurrentUser();
   }
@@ -54,13 +67,13 @@ class App extends Component {
   getRoutes = () => {
     if (this.state.isAuthorized) {
       return (
-        <React.Fragment>
+        
           <Navigation
             {...this.props}
             currentUser={this.state.currentUser}
             logOut={this.logOut}
-          />
-        </React.Fragment>
+          >{mainList.map(this.getComponents)}</Navigation>
+        
       );
     } else {
       return (

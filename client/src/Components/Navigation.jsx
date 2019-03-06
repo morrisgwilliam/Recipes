@@ -1,40 +1,66 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import mainList from "../componentList";
-import { withStyles } from "@material-ui/core/styles";
-import styles from "../Styles/Materials/DashHeader";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { Link } from "react-router-dom";
 
-import NavBarDrawer from "./Navigation/NavBarDrawer";
-
-class Navigation extends React.Component {
-  mapRoutes = (route, index) => {
-    debugger;
-    return (
-      <Route
-        key={index}
-        {...this.props}
-        exact
-        path={route.path}
-        component={props => (
-          <route.component key={index} {...props} {...this.props.currentUser} />
-        )}
-      />
-    );
+class Navigation extends React.PureComponent {
+  state = {
+    open: true,
+    anchorEl: null
   };
-  shouldComponentUpdate(nextProps) {
-    return this.props.location.pathname === nextProps.location.pathname
-      ? false
-      : true;
-  }
+
+  redirect = path => this.props.history.push(path);
+
+  navBarRoutes = (route, index) => {
+    if (route.nav) {
+      return (
+        <ListItem
+          key={index + 50}
+          button
+          onClick={() => this.redirect(route.path)}
+        >
+          <ListItemIcon>{route.icon ? <route.icon /> : ""}</ListItemIcon>
+          <ListItemText primary={route.name} />
+        </ListItem>
+      );
+    }
+  };
+
+  handleDrawerOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleDrawerClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleMenu = e => {
+    console.log(e.currentTarget);
+    this.setState({ anchorEl: e.currentTarget });
+  };
+  closeMenu = () => {
+    this.setState({
+      anchorEl: null
+    });
+  };
+  editUserProfileLink = () => {
+    this.props.history.push("/user/edit");
+  };
   render() {
-    const { classes, logOut } = this.props;
+    const { classes, currentUser, logOut, children } = this.props;
+    const { anchorEl } = this.state;
+    const avatarOpen = Boolean(anchorEl);
     return (
       <div className={classes.root}>
         <NavBarDrawer {...this.props} logOut={logOut} />
         <div className={classes.content}>
           <div className={classes.appBarSpacer} />
-          {/* rendering all routes */}
-          {mainList.map(this.mapRoutes)}
+
+          {children}
+
         </div>
       </div>
     );
