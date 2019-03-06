@@ -15,16 +15,17 @@ import { Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 import styles from "../Styles/Materials/Form";
 import RecipesSVG from "./RecipesSVG";
+import { Formik } from "formik";
+import * as schemas from "../Schemas/accountSchemas";
 
 const MyLink = props => <RouterLink {...props} to="/register" />;
 
 class LogInForm extends React.Component {
-  state = {};
-  handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
+  constructor(props) {
+    super(props);
+    this.validation = schemas.getLogInSchema;
+    this.state = {};
+  }
   logIn = () => {
     const payload = {
       EmailAddress: this.state.EmailAddress,
@@ -36,7 +37,7 @@ class LogInForm extends React.Component {
       .catch(this.onLogInError);
   };
   onLogInSuccess = () => {
-    this.props.history.push("/myrecipes");
+    this.props.history.push("/");
     this.props.setAuthorized();
   };
   onLogInerror = response => {
@@ -55,45 +56,74 @@ class LogInForm extends React.Component {
               ? "Sign In With Your New Account"
               : "Sign In"}
           </Typography>
-          <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="EmailAddress">Email Address</InputLabel>
-              <Input
-                id="EmailAddress"
-                name="EmailAddress"
-                //autoComplete="EmailAddress"
-                placeholder="Email Address"
-                autoFocus
-                onChange={this.handleChange}
-              />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                name="Password"
-                type="Password"
-                id="Password"
-                placeholder="Password"
-                //autoComplete="current-password"
-                onChange={this.handleChange}
-              />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Link component={MyLink}>Dont have an account?</Link>
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={this.logIn}
-            >
-              Sign in
-            </Button>
-          </form>
+          <Formik
+            initialValues={this.validation.initialValues}
+            onSubmit={this.logIn}
+            validationSchema={this.validation()}
+          >
+            {props => {
+              const {
+                values,
+                touched,
+                errors,
+                isSubmitting,
+                handleChange,
+                handleBlur,
+                handleSubmit
+              } = props;
+              return (
+                <form className={classes.form} onSubmit={handleSubmit}>
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel htmlFor="EmailAddress">
+                      Email Address
+                    </InputLabel>
+                    <Input
+                      id="EmailAddress"
+                      name="EmailAddress"
+                      placeholder="Email Address"
+                      onChange={handleChange}
+                      value={values.EmailAddress}
+                      onBlur={handleBlur}
+                      type="email"
+                      error={
+                        errors.EmailAddress && touched.EmailAddress
+                          ? true
+                          : false
+                      }
+                    />
+                  </FormControl>
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel htmlFor="password">Password</InputLabel>
+                    <Input
+                      name="Password"
+                      type="Password"
+                      id="Password"
+                      placeholder="Password"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={errors.Password && touched.Password ? true : false}
+                    />
+                  </FormControl>
+                  <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Remember me"
+                  />
+                  <Link component={MyLink}>Dont have an account?</Link>
+                  <Button
+                    type="button"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={this.logIn}
+                    disabled={isSubmitting}
+                  >
+                    Sign in
+                  </Button>
+                </form>
+              );
+            }}
+          </Formik>
         </Paper>
       </main>
     );
