@@ -61,7 +61,7 @@ class NavBarDrawer extends React.PureComponent {
     this.props.history.push("/user/edit");
   };
   render() {
-    const { logOut, classes } = this.props;
+    const { logOut, classes, currentUser } = this.props;
     const { anchorEl } = this.state;
     const avatarOpen = Boolean(anchorEl);
     return (
@@ -106,8 +106,9 @@ class NavBarDrawer extends React.PureComponent {
               onClick={this.handleMenu}
             >
               <Avatar alt="Remy Sharp">
-                {/* {currentUser.email && currentUser.email.charAt(0).toUpperCase()} */}
-                G
+                {currentUser.email
+                  ? currentUser.email.charAt(0).toUpperCase()
+                  : "G"}
               </Avatar>
             </IconButton>
             <Menu

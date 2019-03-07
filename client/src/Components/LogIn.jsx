@@ -15,7 +15,7 @@ import { Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 import styles from "../Styles/Materials/Form";
 import RecipesSVG from "./RecipesSVG";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
 import * as schemas from "../Schemas/accountSchemas";
 
 const MyLink = props => <RouterLink {...props} to="/register" />;
@@ -25,14 +25,11 @@ class LogInForm extends React.Component {
     super(props);
     this.validation = schemas.getLogInSchema;
     this.state = {};
+    this.state.data = this.validation.initialValues;
   }
-  logIn = () => {
-    const payload = {
-      EmailAddress: this.state.EmailAddress,
-      Password: this.state.Password
-    };
+  logIn = values => {
     userService
-      .logIn(payload)
+      .logIn(values)
       .then(this.onLogInSuccess)
       .catch(this.onLogInError);
   };
@@ -56,56 +53,86 @@ class LogInForm extends React.Component {
               ? "Sign In With Your New Account"
               : "Sign In"}
           </Typography>
-          <Formik initialValues={this.state.initialValues} onSubmit={this.logIn} validationSchema={this.validation()}>
-          {props => {
-            const {
-              values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit
-            } = props;
-          
-          return (
-          <form className={classes.form} onSubmit={this.logIn}>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="EmailAddress">{errors.EmailAddress && touched.EmailAddress? errors.EmailAddress : "Email Address"}</InputLabel>
-              <Input
-                id="EmailAddress"
-                name="EmailAddress"
-                //autoComplete="EmailAddress"
-                placeholder="Email Address"
-                autoFocus
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.EmailAddress}
-                error={errors.EmailAddress && touched.EmailAddress? true : false}
-              />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                name="Password"
-                type="Password"
-                id="Password"
-                placeholder="Password"
-                //autoComplete="current-password"
-                onChange={this.handleChange}
-              />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Link component={MyLink}>Dont have an account?</Link>
-            <Button
-              type="button"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={this.logIn}
-            >
-              Sign in
-            </Button>
-          </form>
-          )}}
+          <Formik
+            initialValues={this.state.data}
+            onSubmit={this.logIn}
+            validationSchema={this.validation()}
+            enableReinitialize={true}
+          >
+            {props => {
+              const {
+                values,
+                handleChange,
+                handleSubmit,
+                touched,
+                errors,
+                isSubmitting,
+                handleBlur
+              } = props;
+              return (
+                <Form
+                  onChange={handleChange}
+                  onSubmit={handleSubmit}
+                  className={classes.form}
+                  action="#"
+                  data-parsley-validate=""
+                  noValidate=""
+                >
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel htmlFor="EmailAddress">
+                      {errors.EmailAddress && touched.EmailAddress
+                        ? errors.EmailAddress
+                        : "Email Address"}
+                    </InputLabel>
+                    <Input
+                      id="EmailAddress"
+                      type="email"
+                      name="EmailAddress"
+                      placeholder="Email Address"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.EmailAddress}
+                      error={
+                        errors.EmailAddress && touched.EmailAddress
+                          ? true
+                          : false
+                      }
+                    />
+                  </FormControl>
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel htmlFor="password">
+                      {errors.Password && touched.Password
+                        ? errors.Password
+                        : "Password"}
+                    </InputLabel>
+                    <Input
+                      name="Password"
+                      type="Password"
+                      id="Password"
+                      placeholder="Password"
+                      value={values.Password}
+                      onChange={handleChange}
+                      error={errors.Password && touched.Password ? true : false}
+                    />
+                  </FormControl>
+                  <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Remember me"
+                  />
+                  <Link component={MyLink}>Dont have an account?</Link>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    disabled={isSubmitting}
+                  >
+                    Sign in
+                  </Button>
+                </Form>
+              );
+            }}
           </Formik>
         </Paper>
       </main>

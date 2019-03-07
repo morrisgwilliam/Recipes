@@ -21,7 +21,6 @@ class MyRecipes extends React.PureComponent {
     };
   }
   componentDidMount() {
-    debugger;
     this.getUserRecipes();
   }
 
@@ -99,7 +98,7 @@ class MyRecipes extends React.PureComponent {
 
           <div className={this.props.classes.tableContainer}>
             <MyRecipesTable
-              {...this.props.currentUser}
+              {...this.props}
               recipes={this.state.recipes}
               getUserRecipes={this.getUserRecipes}
             />

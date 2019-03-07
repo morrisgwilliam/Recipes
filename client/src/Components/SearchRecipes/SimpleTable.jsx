@@ -115,7 +115,6 @@ class SimpleTable extends React.Component {
     }
   };
   addRecipe = () => {
-    debugger;
     const { selectedRecipe } = this.state;
     const payload = {
       ApiId: selectedRecipe.id,

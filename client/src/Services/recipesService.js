@@ -39,7 +39,6 @@ const addUserRecipes = payload => {
   return axios(config);
 };
 const deleteUserRecipe = payload => {
-  debugger;
   const config = {
     url: `/api/recipes/${payload.recipeId}/${payload.userId}`,
     method: "DELETE"

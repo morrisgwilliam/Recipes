@@ -17,7 +17,7 @@ class Tips extends React.PureComponent {
 
   getAccordion = (tip, index, classes, selected) => {
     return (
-      <React.Fragment>
+      <>
         <Button
           id={index}
           className={classes.materialbutton}
@@ -36,7 +36,7 @@ class Tips extends React.PureComponent {
             <CardBody>{tip.body}</CardBody>
           </Card>
         </Collapse>
-      </React.Fragment>
+      </>
     );
   };
 

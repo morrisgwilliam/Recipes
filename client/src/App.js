@@ -5,7 +5,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import LogIn from "./Components/LogIn";
 import Register from "./Components/Register";
 import Navigation from "./Components/Navigation";
-import mainList from './componentList'
+import mainList from "./componentList";
 
 class App extends Component {
   constructor(props) {
@@ -16,16 +16,17 @@ class App extends Component {
     };
   }
 
-  getComponents = (route, index) =>
- (
-      <Route
+  getComponents = (route, index) => (
+    <Route
       key={index}
-        {...this.props}
-        exact
-        path={route.path}
-        render={props => <route.component {...this.props.currentUser} {...props}/>}
-      />
-    )
+      {...this.props}
+      exact
+      path={route.path}
+      render={props => (
+        <route.component {...this.state.currentUser} {...props} />
+      )}
+    />
+  );
 
   componentDidMount() {
     this.getCurrentUser();
@@ -67,13 +68,13 @@ class App extends Component {
   getRoutes = () => {
     if (this.state.isAuthorized) {
       return (
-        
-          <Navigation
-            {...this.props}
-            currentUser={this.state.currentUser}
-            logOut={this.logOut}
-          >{mainList.map(this.getComponents)}</Navigation>
-        
+        <Navigation
+          {...this.props}
+          currentUser={this.state.currentUser}
+          logOut={this.logOut}
+        >
+          {mainList.map(this.getComponents)}
+        </Navigation>
       );
     } else {
       return (
@@ -82,7 +83,7 @@ class App extends Component {
             exact
             path="/login"
             render={props => (
-              <LogIn {...props} setAuthorized={this.setAuthorized} />
+              <LogIn {...props} setAuthorized={this.getCurrentUser} />
             )}
           />
           <Route

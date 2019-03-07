@@ -25,10 +25,6 @@ class FindRecipes extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
-    debugger;
-  }
-
   setIngredients = e => {
     this.setState({
       includeIngredients: e.target.value
@@ -54,7 +50,7 @@ class FindRecipes extends React.PureComponent {
         return {
           limitLicense: true,
           offset: 0,
-          number: 1,
+          number: 5,
           includeIngredients: this.state.includeIngredients,
           ranking: 2
         };
@@ -62,7 +58,7 @@ class FindRecipes extends React.PureComponent {
         return {
           limitLicense: true,
           offset: 0,
-          number: 1,
+          number: 5,
           includeIngredients: this.state.includeIngredients,
           ranking: 2,
           diet: this.state.diet

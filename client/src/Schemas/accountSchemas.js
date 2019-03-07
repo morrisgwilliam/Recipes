@@ -8,7 +8,7 @@ const getLogInSchema = () =>
         message: "Email address must not contain any spaces.",
         excludeEmptyString: true
       }),
-    paPasswordssword: Yup.string().required("This field is required.")
+    Password: Yup.string().required("This field is required.")
   });
 
 getLogInSchema.initialValues = {

@@ -176,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="SuperSecretConfig.xml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
