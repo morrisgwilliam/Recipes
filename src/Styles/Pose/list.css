@@ -1,0 +1,25 @@
+.item {
+  background: #43415f;
+  border-radius: 5px;
+  height: 40px;
+  width: 100%;
+  opacity: 0;
+  margin-bottom: 10px;
+  transform-origin-y: 0%;
+  color: white;
+  background: #83ae9b;
+}
+
+.sidebar {
+  width: 300px;
+  height: 100vh;
+  background: #eee;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}

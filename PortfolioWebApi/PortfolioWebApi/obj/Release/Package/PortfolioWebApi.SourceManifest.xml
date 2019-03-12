@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Portfolio React-Net\PortfolioWebApi\PortfolioWebApi\obj\Release\Package\PackageTmp" />
+  <setAcl path="C:\Portfolio React-Net\PortfolioWebApi\PortfolioWebApi\obj\Release\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Portfolio React-Net\PortfolioWebApi\PortfolioWebApi\obj\Release\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>
